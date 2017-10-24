@@ -1,0 +1,4 @@
+nltk
+lxml
+gensim
+pyLDAvis

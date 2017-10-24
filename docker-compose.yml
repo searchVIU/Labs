@@ -1,0 +1,9 @@
+version: '2.1'
+services:
+  jupyter:
+    build: ./docker
+    command: ["start-notebook.sh", "--NotebookApp.token=''"]
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    ports:
+      - "8888:8888"
