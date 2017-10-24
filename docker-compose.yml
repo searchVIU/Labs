@@ -6,4 +6,4 @@ services:
     volumes:
       - ./notebooks:/home/jovyan/work
     ports:
-      - "8889:8888"
+      - "8888:8888"
