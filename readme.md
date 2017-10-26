@@ -30,4 +30,4 @@ You will find an example file with 3 rows in data/example_ctr_prediction.csv
 #### 2. Prediction of positions for optimized landing pages
 In this experiment we try to predict the position for the case that we have an optimized landing page for a set of Keywords from SEMrush API.
 To run this experiment you need a SEMrush API Key.
-[You will find an explanation of this experiment in our blog](https://www.searchviu.com/blog/article)
+[You will find an explanation of this experiment in our blog](https://www.searchviu.com/en/machine-learning-seo-predicting-rankings/)
