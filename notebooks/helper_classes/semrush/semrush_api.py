@@ -11,10 +11,11 @@ import os.path
 class SEMRushAPI():
 
 
-    def __init__(self, api_key, api_url='http://api.semrush.com/'):
+    def __init__(self, api_key, api_url='http://api.semrush.com/', database='en'):
         self.api_key = api_key
         self.api_url = api_url
         self.cache_dir = './semrush_cache/'
+        self.database = database
         if self.api_key == '':
             print("Error: Valid SEMrush API Key needed.")
         pass
@@ -24,7 +25,7 @@ class SEMRushAPI():
         rtype = 'domain_ranks'
         query_data = {'type': rtype,
                       'domain': domain,
-                      'database': 'de',
+                      'database': self.database,
                       'export_columns': 'Db,Dn,Rk,Or,Ot,Oc,Ad,At,Ac,Sv,Sh',
                       'export_escape': 1,
                       'display_limit': count}
@@ -38,8 +39,8 @@ class SEMRushAPI():
             rtype = 'domain_organic'
         query_data = {'type': rtype,
                       'domain': domain,
-                      'database': 'de',
-                      'export_columns': 'Ph, Po, Pp, Pd, Nq, Cp, Ur, Tr, Tc, Co, Nr, Td	',
+                      'database': self.database,
+                      'export_columns': 'Ph,Po,Pp,Pd,Nq,Cp,Ur,Tr,Tc,Co,Nr,Td',
                       'export_escape': 1,
                       'display_limit': count}
         return self.sem_request(query_data)
@@ -48,7 +49,7 @@ class SEMRushAPI():
         rtype = 'phrase_this'
         query_data = {'type': rtype,
                       'phrase': keyword,
-                      'database': 'de',
+                      'database': self.database,
                       'export_columns': 'Ph,Nq,Cp,Co,Nr',
                       'export_escape': 1,
                       'display_limit': count}
@@ -61,7 +62,7 @@ class SEMRushAPI():
             rtype = 'phrase_organic'
         query_data = {'type': rtype,
                       'phrase': keyword,
-                      'database': 'de',
+                      'database': self.database,
                       'export_columns': 'Dn,Ur',
                       'export_escape': 1,
                       'display_limit': count}
@@ -81,11 +82,19 @@ class SEMRushAPI():
             query_data["key"] = self.api_key
             result = requests.get(url, params=query_data)
             if result.status_code != 200:
-                print("Error reaching SEMrush API")
+                error_msg = ''
+                if result.text:
+                    error_msg = result.text
+                print("Error reaching SEMrush API: {}".format(error_msg))
                 return None
-            if result.text.startswith("ERROR"):
+
+            if result.text.startswith("ERROR 50"):
+                # No results from SEMrush
+                return None
+            elif result.text.startswith("ERROR"):
                 print("SEMrush API ERROR: {}".format(result.text))
                 return None
+
             result_body = self.gen_obj_from_csv(result.text)
             self.save_request(query_data, result_body)
         else:
