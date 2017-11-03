@@ -10,8 +10,7 @@ import os.path
 
 class SEMRushAPI():
 
-
-    def __init__(self, api_key, api_url='http://api.semrush.com/', database='en'):
+    def __init__(self, api_key, api_url='http://api.semrush.com/', database='uk'):
         self.api_key = api_key
         self.api_url = api_url
         self.cache_dir = './semrush_cache/'
@@ -19,7 +18,6 @@ class SEMRushAPI():
         if self.api_key == '':
             print("Error: Valid SEMrush API Key needed.")
         pass
-
 
     def get_domain_overview(self, domain, count=1):
         rtype = 'domain_ranks'
@@ -30,7 +28,6 @@ class SEMRushAPI():
                       'export_escape': 1,
                       'display_limit': count}
         return self.sem_request(query_data)
-
 
     def get_domain_keywords(self, domain, result_type='organic', count=1):
         if result_type=='paid':
